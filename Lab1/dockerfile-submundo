@@ -1,0 +1,11 @@
+FROM golang:1.24.2
+WORKDIR /app
+COPY . .
+RUN go mod tidy
+
+# Add environment variables with default values that can be overridden
+ENV RABBITMQ_HOST=rabbitmq
+ENV RABBITMQ_PORT=5672
+
+RUN go build -o submundo .
+CMD ["sh", "-c", "./submundo -rabbitmq_host=$RABBITMQ_HOST -rabbitmq_port=$RABBITMQ_PORT"]

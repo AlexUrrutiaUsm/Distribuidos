@@ -1,0 +1,56 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5679:5672"
+      - "15682:15672"
+    networks:
+      - app-network
+  
+  caza:
+    build:
+      context: .
+      dockerfile: dockerfile-caza
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+  gobierno:
+    build:
+      context: .
+      dockerfile: dockerfile-gobierno
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+  marina:
+    build:
+      context: .
+      dockerfile: dockerfile-marina
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+  submundo:
+    build:
+      context: .
+      dockerfile: dockerfile-submundo
+    networks:
+      - app-network
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+
+networks:
+  app-network:
+    driver: bridge
